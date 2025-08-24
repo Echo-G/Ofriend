@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36203.30 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ofriend", "Ofriend.csproj", "{FEA524EA-8E41-2368-39F7-E3AF775ACF1A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FEA524EA-8E41-2368-39F7-E3AF775ACF1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEA524EA-8E41-2368-39F7-E3AF775ACF1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEA524EA-8E41-2368-39F7-E3AF775ACF1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEA524EA-8E41-2368-39F7-E3AF775ACF1A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {10145321-10D7-4585-AB3E-A8C4FF23879A}
+	EndGlobalSection
+EndGlobal

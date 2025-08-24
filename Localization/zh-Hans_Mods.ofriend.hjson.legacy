@@ -1,0 +1,57 @@
+Configs: {
+	OfriendConfig: {
+		// DisplayName: Ofriend Config
+
+		Headers: {
+			// UI设置: U I设置 Header
+			// Power_UI_Settings: Power_ U I_ Settings Header
+		}
+
+		PowerUIPosition: {
+			// Label: Power UI 位置
+			// Tooltip: Power UI 在屏幕上的位置
+		}
+
+		PowerUIPositionX: {
+			// Label: Power_UI_Position_X
+			// Tooltip: The X position of the Power UI (0-1)
+		}
+
+		PowerUIPositionY: {
+			// Label: Power_UI_Position_Y
+			// Tooltip: The Y position of the Power UI (0-1)
+		}
+
+		ShowPowerText: {
+			// Label: Show_Power_Text
+			// Tooltip: Whether to show the power text on the UI
+		}
+	}
+}
+
+Items: {
+	PowerTestItem: {
+		// DisplayName: Power Test Item
+		// Tooltip: ""
+	}
+
+	Boki: {
+		// DisplayName: Boki
+		// Tooltip: ""
+	}
+
+	Nanatra: {
+		// DisplayName: Nanatra
+		// Tooltip: ""
+	}
+
+	KoishiFumo: {
+		// DisplayName: Koishi Fumo
+		// Tooltip: ""
+	}
+
+	NanamiItem: {
+		// DisplayName: Nanami Item
+		// Tooltip: ""
+	}
+}
