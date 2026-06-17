@@ -54,4 +54,15 @@ Items: {
 		DisplayName: Nanami Item
 		Tooltip: ""
 	}
+
+	Gohei: {
+		DisplayName: Gohei
+		Tooltip: ""
+	}
+}
+
+Projectiles: {
+	DreamSeal.DisplayName: Dream Seal
+	HomingAmulet.DisplayName: Homing Amulet
+	Ofuda.DisplayName: Ofuda
 }

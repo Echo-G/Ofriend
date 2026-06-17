@@ -20,19 +20,73 @@ namespace Ofriend.Players
 
         public override void PostUpdate()
         {
-            // 检查是否跨过任何阈值
+            lastPower = power;
+        }
+
+        // 增加能力值
+        public void AddPower(int amount)
+        {
+            int oldPower = power;
+            power += amount;
+            ClampPower();
+            CheckThresholds(oldPower, power);
+        }
+
+        // 减少能力值
+        public void ReducePower(int amount)
+        {
+            int oldPower = power;
+            power -= amount;
+            ClampPower();
+            CheckThresholds(oldPower, power);
+        }
+
+        public bool Bomb()
+        {
+            if(power >= 1000){
+                power -= 1000;
+                BombSound();
+                return true;
+            }
+            return false;
+        }
+        // 设置能力值
+        public void SetPower(int value)
+        {
+            int oldPower = power;
+            power = value;
+            ClampPower();
+            CheckThresholds(oldPower, power);
+        }
+
+        // 边界检查
+        private void ClampPower()
+        {
+            if (power < 0) power = 0;
+            if (power > PowerSystem.MaxPower) power = PowerSystem.MaxPower;
+        }
+
+        // 检查阈值
+        private void CheckThresholds(int oldPower, int newPower)
+        {
             foreach (int threshold in powerThresholds)
             {
-                if (lastPower < threshold && power >= threshold)
+                if (oldPower < threshold && newPower >= threshold)
                 {
                     PlayPowerupSound();
                     break;
                 }
             }
-            lastPower = power;
+        }
+        //播放放符卡音效
+        private static void BombSound()
+        {
+            // 播放音效
+            SoundEngine.PlaySound(new SoundStyle("Ofriend/Assets/Sounds/Bomb"));
         }
 
-        private void PlayPowerupSound()
+        // 播放能力值增加音效
+        private static void PlayPowerupSound()
         {
             // 播放音效
             SoundEngine.PlaySound(new SoundStyle("Ofriend/Assets/Sounds/Powerup"));

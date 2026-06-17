@@ -34,21 +34,13 @@ namespace Ofriend.Items
             // 右键减少Power
             if (player.altFunctionUse == 2)
             {
-                powerPlayer.power -= 100;
-                if (powerPlayer.power < 0)
-                {
-                    powerPlayer.power = 0;
-                }
+                powerPlayer.ReducePower(100);
                 Main.NewText($"Power decreased to {powerPlayer.power}");
             }
             // 左键增加Power
             else
             {
-                powerPlayer.power += 100;
-                if (powerPlayer.power > PowerSystem.MaxPower)
-                {
-                    powerPlayer.power = PowerSystem.MaxPower;
-                }
+                powerPlayer.AddPower(100);
                 Main.NewText($"Power increased to {powerPlayer.power}");
             }
             return true;

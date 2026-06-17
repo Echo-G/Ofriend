@@ -31,27 +31,38 @@ Configs: {
 
 Items: {
 	PowerTestItem: {
-		// DisplayName: Power Test Item
+		DisplayName: 能量测试物品
 		// Tooltip: ""
 	}
 
 	Boki: {
-		// DisplayName: Boki
+		DisplayName: 波奇酱的发饰
 		// Tooltip: ""
 	}
 
 	Nanatra: {
-		// DisplayName: Nanatra
+		DisplayName: 七海的帽子
 		// Tooltip: ""
 	}
 
 	KoishiFumo: {
-		// DisplayName: Koishi Fumo
+		DisplayName: 古明地觉布偶
 		// Tooltip: ""
 	}
 
 	NanamiItem: {
-		// DisplayName: Nanami Item
+		DisplayName: 七海物品
 		// Tooltip: ""
 	}
+
+	Gohei: {
+		DisplayName: 御币
+		// Tooltip: ""
+	}
+}
+
+Projectiles: {
+	// DreamSeal.DisplayName: Dream Seal
+	// HomingAmulet.DisplayName: Homing Amulet
+	// Ofuda.DisplayName: Ofuda
 }
