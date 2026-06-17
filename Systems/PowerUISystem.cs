@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.UI;
+using Ofriend.Items;
 using Ofriend.UI;
 using System.Collections.Generic;
 
@@ -42,12 +43,22 @@ namespace Ofriend.Systems
                     "Ofriend: Power UI",
                     delegate
                     {
-                        PowerInterface?.Draw(Main.spriteBatch, new GameTime());
+                        if (ShouldDrawPowerUI())
+                        {
+                            PowerInterface?.Draw(Main.spriteBatch, new GameTime());
+                        }
+
                         return true;
                     },
                     InterfaceScaleType.UI
                 ));
             }
+        }
+
+        private static bool ShouldDrawPowerUI()
+        {
+            Player player = Main.LocalPlayer;
+            return player.active && !player.dead && player.HeldItem?.ModItem is Gohei;
         }
     }
 } 

@@ -57,11 +57,29 @@ Items: {
 
 	Gohei: {
 		DisplayName: 御币
-		// Tooltip: ""
+		Tooltip:
+			'''
+			左键发射符扎
+			按照不同的power等级提升强度
+			[c/F08080:一级发射两枚符扎]
+			[c/FF6347:二级拥有两枚阴阳玉环绕，阴阳玉会发射追踪符]
+			[c/FF4500:三级发射四枚符扎]
+			[c/FF0000:四级拥有四枚阴阳玉环绕]
+			'''
+	}
+
+	BuleBullet: {
+		DisplayName: 蓝弹
+		Tooltip:
+			'''
+			这是[c/1C86EE:蓝][c/00BFFF:蓝]的弹
+			发射追踪特别的[c/FF7F24:强力]的子弹
+			'''
 	}
 }
 
 Projectiles: {
+	// BuleBullet.DisplayName: Bule Bullet
 	// DreamSeal.DisplayName: Dream Seal
 	// HomingAmulet.DisplayName: Homing Amulet
 	// Ofuda.DisplayName: Ofuda

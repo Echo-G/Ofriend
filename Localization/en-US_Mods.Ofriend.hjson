@@ -59,9 +59,15 @@ Items: {
 		DisplayName: Gohei
 		Tooltip: ""
 	}
+
+	BuleBullet: {
+		DisplayName: Bule Bullet
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
+	BuleBullet.DisplayName: Bule Bullet
 	DreamSeal.DisplayName: Dream Seal
 	HomingAmulet.DisplayName: Homing Amulet
 	Ofuda.DisplayName: Ofuda
