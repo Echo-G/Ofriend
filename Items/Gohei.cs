@@ -1,21 +1,27 @@
 using Microsoft.Xna.Framework;
+using Ofriend.Players;
+using Ofriend.Projectiles;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.DataStructures;
-using Ofriend.Players;
-using Ofriend.Systems;
-using Ofriend.Projectiles;
-using System;
 
 namespace Ofriend.Items
 {
-
     public class Gohei : ModItem
     {
-        private int homingCooldown = 0;
-        private int bombTimer = 0;
-        private int bombState = 0;
+        public const int PanelDamage = 20;
+        public const float OfudaDamageMultiplier = 0.40f;
+        public const float HomingAmuletDamageMultiplier = 0.55f;
+        public const float DreamSealDamageMultiplier = 1.50f;
+
+        public const float OfudaSpeed = 20f;
+        public const float HomingAmuletInitialSpeed = 12f;
+        public const float HomingAmuletKnockBack = 2f;
+        public const float DreamSealInitialSpeed = 8f;
+        public const float DreamSealKnockBack = 2f;
+
+        private const int OrbFireDelayFrames = 3;
 
         public override void SetDefaults()
         {
@@ -28,12 +34,12 @@ namespace Ofriend.Items
             Item.rare = ItemRarityID.Green;
             Item.UseSound = null;
             Item.autoReuse = true;
-            Item.damage = 20;
+            Item.damage = PanelDamage;
             Item.knockBack = 2f;
             Item.noMelee = true;
             Item.DamageType = DamageClass.Magic;
             Item.shoot = ModContent.ProjectileType<Ofuda>();
-            Item.shootSpeed = 16f;
+            Item.shootSpeed = OfudaSpeed;
         }
 
         public override bool AltFunctionUse(Player player)
@@ -41,129 +47,162 @@ namespace Ofriend.Items
             return true;
         }
 
-        public override bool? UseItem(Player player)
+        public override bool CanUseItem(Player player)
         {
-            var powerPlayer = player.GetModPlayer<PowerPlayer>();
+            GoheiPlayer goheiPlayer = player.GetModPlayer<GoheiPlayer>();
 
-            // 右键消耗Power
             if (player.altFunctionUse == 2)
             {
-                if (powerPlayer.Bomb())
-                {
-                    // 初始化Bomb状态和计时器
-                    bombState = 1;
-                    bombTimer = 0;
-                }
+                return !goheiPlayer.IsBombActive;
             }
+
+            return !goheiPlayer.IsBombActive;
+        }
+
+        public override bool? UseItem(Player player)
+        {
+            if (player.altFunctionUse != 2)
+            {
+                return true;
+            }
+
+            PowerPlayer powerPlayer = player.GetModPlayer<PowerPlayer>();
+            GoheiPlayer goheiPlayer = player.GetModPlayer<GoheiPlayer>();
+
+            if (!goheiPlayer.IsBombActive && powerPlayer.Bomb())
+            {
+                goheiPlayer.StartBomb();
+            }
+
             return true;
+        }
+
+        public override void HoldItem(Player player)
+        {
+            MaintainYinYangOrbs(player);
         }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            // 计算伤害为面板的40%
-            int adjustedDamage = (int)(damage * 0.4f);
-
-            // 发射平行的两个符札射弹（不重叠）
-            float offsetDistance = 10f; // 偏移距离，确保不重叠
-            Vector2 perpendicular = new Vector2(-velocity.Y, velocity.X).SafeNormalize(Vector2.Zero);
-
-            for (int i = 0; i < 2; i++)
+            if (player.altFunctionUse == 2 || player.GetModPlayer<GoheiPlayer>().IsBombActive)
             {
-                // 计算偏移位置
-                Vector2 offset = perpendicular * offsetDistance * (i == 0 ? -1 : 1);
-                Vector2 spawnPosition = position + offset;
-                // 保持相同的速度向量，实现平行移动
-                Projectile.NewProjectile(source, spawnPosition, velocity, type, adjustedDamage, knockback, player.whoAmI);
+                return false;
             }
 
-            // 发射追踪射弹
-            homingCooldown--;
-            if (homingCooldown <= 0)
+            int powerLevel = player.GetModPlayer<PowerPlayer>().PowerLevel;
+            int ofudaCount = GetOfudaCount(powerLevel);
+            int ofudaDamage = GetOfudaDamage(damage);
+            Vector2 shotVelocity = velocity.SafeNormalize(Vector2.UnitX) * OfudaSpeed;
+            Vector2 perpendicular = shotVelocity.SafeNormalize(Vector2.UnitX).RotatedBy(MathHelper.PiOver2);
+
+            foreach (float offset in GetOfudaOffsets(ofudaCount))
             {
-                var powerPlayer = player.GetModPlayer<PowerPlayer>();
-                int power = powerPlayer.power;
-                int homingCount = 0;
-
-                if (power >= 1000 && power < 2000)
-                {
-                    homingCount = 2;
-                }
-                else if (power >= 2000 && power < 3000)
-                {
-                    homingCount = 4;
-                }
-                else if (power >= 3000 && power <= 4000)
-                {
-                    homingCount = 6;
-                }
-
-                if (homingCount > 0)
-                {
-                    // 计算伤害为面板的60%
-                    int homingDamage = (int)(damage * 0.6f);
-
-                    // 发射追踪射弹
-                    float homingSpread = MathHelper.ToRadians(15);
-                    float angleStep = homingCount > 1 ? homingSpread * 2 / (homingCount - 1) : 0;
-
-                    for (int i = 0; i < homingCount; i++)
-                    {
-                        float angle = velocity.ToRotation() - homingSpread + i * angleStep;
-                        Vector2 homingVelocity = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)) * 12f;
-                        Projectile.NewProjectile(source, position, homingVelocity, ModContent.ProjectileType<HomingAmulet>(), homingDamage, knockback, player.whoAmI);
-                    }
-                }
-                homingCooldown = 4;
+                Projectile.NewProjectile(
+                    source,
+                    position + perpendicular * offset,
+                    shotVelocity,
+                    type,
+                    ofudaDamage,
+                    knockback,
+                    player.whoAmI);
             }
 
+            SignalOrbsToFire(player, GetHomingAmuletDamage(damage));
             return false;
         }
 
-        public override void UpdateInventory(Player player)
+        public static int GetOfudaDamage(int panelDamage)
         {
-            // 处理Bomb弹幕释放
-            if (bombState > 0)
-            {
-                bombTimer++;
+            return (int)(panelDamage * OfudaDamageMultiplier);
+        }
 
-                // 第一秒结束释放第一个弹幕
-                if (bombState == 1 && bombTimer >= 60)
+        public static int GetHomingAmuletDamage(int panelDamage)
+        {
+            return (int)(panelDamage * HomingAmuletDamageMultiplier);
+        }
+
+        public static int GetDreamSealDamage(int panelDamage)
+        {
+            return (int)(panelDamage * DreamSealDamageMultiplier);
+        }
+
+        public static int GetOfudaCount(int powerLevel)
+        {
+            return powerLevel >= 3 ? 4 : 2;
+        }
+
+        public static int GetOrbCount(int powerLevel)
+        {
+            if (powerLevel >= 4)
+            {
+                return 4;
+            }
+
+            if (powerLevel >= 2)
+            {
+                return 2;
+            }
+
+            return 0;
+        }
+
+        private static float[] GetOfudaOffsets(int count)
+        {
+            return count == 4
+                ? new float[] { -18f, -6f, 6f, 18f }
+                : new float[] { -8f, 8f };
+        }
+
+        private static void MaintainYinYangOrbs(Player player)
+        {
+            int desiredCount = GetOrbCount(player.GetModPlayer<PowerPlayer>().PowerLevel);
+            int existingCount = 0;
+
+            foreach (Projectile projectile in Main.projectile)
+            {
+                if (projectile.active &&
+                    projectile.owner == player.whoAmI &&
+                    projectile.type == ModContent.ProjectileType<YinYangOrb>())
                 {
-                    SpawnDreamSeal(player);
-                    bombState = 2;
-                }
-                // 第二秒结束释放第二个弹幕
-                else if (bombState == 2 && bombTimer >= 120)
-                {
-                    SpawnDreamSeal(player);
-                    bombState = 3;
-                }
-                // 第三秒结束释放第三个弹幕
-                else if (bombState == 3 && bombTimer >= 180)
-                {
-                    SpawnDreamSeal(player);
-                    bombState = 4;
-                }
-                // 之后每0.5秒释放一个弹幕，直到6秒结束
-                else if (bombState == 4 && bombTimer >= 210 && (bombTimer - 210) % 30 == 0)
-                {
-                    SpawnDreamSeal(player);
-                    // 6秒结束
-                    if (bombTimer >= 360)
+                    int index = existingCount++;
+                    if (index >= desiredCount)
                     {
-                        bombState = 0;
-                        bombTimer = 0;
+                        projectile.Kill();
+                        continue;
                     }
+
+                    projectile.ai[0] = index;
+                    projectile.ai[1] = desiredCount;
+                    projectile.timeLeft = 2;
                 }
+            }
+
+            for (int i = existingCount; i < desiredCount; i++)
+            {
+                Projectile.NewProjectile(
+                    player.GetSource_ItemUse(player.HeldItem),
+                    player.Center,
+                    Vector2.Zero,
+                    ModContent.ProjectileType<YinYangOrb>(),
+                    0,
+                    0f,
+                    player.whoAmI,
+                    i,
+                    desiredCount);
             }
         }
 
-        private void SpawnDreamSeal(Player player)
+        private static void SignalOrbsToFire(Player player, int damage)
         {
-            // 释放一个DreamSeal弹幕
-            float angle = Main.rand.NextFloat((float)Math.PI * 2);
-            Vector2 velocity = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)) * 8f;
-            Projectile.NewProjectile(player.GetSource_FromThis(), player.Center, velocity, ModContent.ProjectileType<DreamSeal>(), 30, 2f, player.whoAmI);
+            foreach (Projectile projectile in Main.projectile)
+            {
+                if (projectile.active &&
+                    projectile.owner == player.whoAmI &&
+                    projectile.type == ModContent.ProjectileType<YinYangOrb>())
+                {
+                    YinYangOrb.RequestFire(projectile, OrbFireDelayFrames, damage);
+                }
+            }
         }
     }
 }

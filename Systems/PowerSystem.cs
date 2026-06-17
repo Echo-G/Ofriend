@@ -1,6 +1,4 @@
-using Terraria;
 using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
 
 namespace Ofriend.Systems
 {
@@ -9,14 +7,24 @@ namespace Ofriend.Systems
         public const int MaxPower = 4000;
         public const int BombCost = 1000;
 
-        public override void Load()
+        public static int GetPowerLevel(int power)
         {
-            // 系统加载时的初始化
-        }
+            if (power >= 3000)
+            {
+                return 4;
+            }
 
-        public override void Unload()
-        {
-            // 系统卸载时的清理
+            if (power >= 2000)
+            {
+                return 3;
+            }
+
+            if (power >= 1000)
+            {
+                return 2;
+            }
+
+            return 1;
         }
     }
-} 
+}

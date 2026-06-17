@@ -1,12 +1,16 @@
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace Ofriend.Projectiles
 {
     public class HomingAmulet : ModProjectile
     {
+        private const float SearchRange = 700f;
+        private const float HomingSpeed = 18f;
+        private const float HomingAcceleration = 1.05f;
+        private const float MinimumNoTargetSpeed = 8f;
+
         public override void SetDefaults()
         {
             Projectile.width = 16;
@@ -15,56 +19,48 @@ namespace Ofriend.Projectiles
             Projectile.hostile = false;
             Projectile.DamageType = DamageClass.Magic;
             Projectile.penetrate = 1;
-            Projectile.timeLeft = 600;
+            Projectile.timeLeft = 240;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
         }
 
         public override void AI()
         {
-            // 寻找目标
-            NPC target = FindClosestNPC(500f);
+            NPC target = FindClosestNPC(SearchRange);
             if (target != null)
             {
-                // 追踪目标
-                Vector2 direction = target.Center - Projectile.Center;
-                direction.Normalize();
-                Projectile.velocity = Vector2.Lerp(Projectile.velocity, direction * 6f, 0.1f);
+                Vector2 desiredVelocity = (target.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * HomingSpeed;
+                Projectile.velocity = Vector2.Lerp(Projectile.velocity, desiredVelocity, HomingAcceleration / HomingSpeed);
             }
-            else
+            else if (Projectile.velocity.Length() < MinimumNoTargetSpeed)
             {
-                // 无目标时，保持当前速度
-                Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * 6f;
+                Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.UnitY) * MinimumNoTargetSpeed;
             }
-            
-            // 旋转效果
-            Projectile.rotation += 0.1f;
+
+            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
         }
 
         private NPC FindClosestNPC(float maxDistance)
         {
             NPC closestNPC = null;
             float closestDistance = maxDistance;
-            
+
             foreach (NPC npc in Main.npc)
             {
-                if (npc.active && !npc.friendly && npc.lifeMax > 5)
+                if (!npc.active || npc.friendly || npc.dontTakeDamage || npc.lifeMax <= 5)
                 {
-                    float distance = Vector2.Distance(Projectile.Center, npc.Center);
-                    if (distance < closestDistance)
-                    {
-                        closestDistance = distance;
-                        closestNPC = npc;
-                    }
+                    continue;
+                }
+
+                float distance = Vector2.Distance(Projectile.Center, npc.Center);
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestNPC = npc;
                 }
             }
-            
-            return closestNPC;
-        }
 
-        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-        {
-            // 命中NPC时的处理
+            return closestNPC;
         }
     }
 }
