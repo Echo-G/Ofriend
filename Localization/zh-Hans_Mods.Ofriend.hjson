@@ -32,7 +32,11 @@ Configs: {
 Items: {
 	PowerTestItem: {
 		DisplayName: 能量测试物品
-		// Tooltip: ""
+		Tooltip:
+			'''
+			左键增加100power值
+			右键减少100power值
+			'''
 	}
 
 	Boki: {
@@ -51,7 +55,7 @@ Items: {
 	}
 
 	NanamiItem: {
-		DisplayName: 七海物品
+		DisplayName: 七海的微笑
 		// Tooltip: ""
 	}
 
@@ -65,6 +69,7 @@ Items: {
 			[c/FF6347:二级拥有两枚阴阳玉环绕，阴阳玉会发射追踪符]
 			[c/FF4500:三级发射四枚符扎]
 			[c/FF0000:四级拥有四枚阴阳玉环绕]
+			右键使用Bomb「梦想封印」
 			'''
 	}
 

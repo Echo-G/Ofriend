@@ -10,7 +10,7 @@ namespace Ofriend.Items
 {
     public class Gohei : ModItem
     {
-        public const int PanelDamage = 20;
+        public const int PanelDamage = 40;
         public const float OfudaDamageMultiplier = 0.40f;
         public const float HomingAmuletDamageMultiplier = 0.55f;
         public const float DreamSealDamageMultiplier = 1.50f;
@@ -40,6 +40,15 @@ namespace Ofriend.Items
             Item.DamageType = DamageClass.Magic;
             Item.shoot = ModContent.ProjectileType<Ofuda>();
             Item.shootSpeed = OfudaSpeed;
+        }
+
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+                .AddIngredient(ItemID.Silk, 5)
+                .AddIngredient(ItemID.WandofSparking)
+                .AddTile(TileID.WorkBenches)
+                .Register();
         }
 
         public override bool AltFunctionUse(Player player)
