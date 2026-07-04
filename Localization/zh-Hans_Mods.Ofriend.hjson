@@ -1,30 +1,24 @@
 Configs: {
 	OfriendConfig: {
-		// DisplayName: Ofriend Config
+		DisplayName: Ofriend 设置
 
 		Headers: {
-			// UI设置: U I设置 Header
-			// Power_UI_Settings: Power_ U I_ Settings Header
+			Power_UI_Settings: Power UI 设置
 		}
 
-		PowerUIPosition: {
-			// Label: Power UI 位置
-			// Tooltip: Power UI 在屏幕上的位置
+		UI_Position_X: {
+			Label: UI 横向位置
+			Tooltip: 距离屏幕左边缘的像素距离
 		}
 
-		PowerUIPositionX: {
-			// Label: Power_UI_Position_X
-			// Tooltip: The X position of the Power UI (0-1)
+		UI_Position_Y: {
+			Label: UI 纵向位置
+			Tooltip: 距离屏幕上边缘的像素距离
 		}
 
-		PowerUIPositionY: {
-			// Label: Power_UI_Position_Y
-			// Tooltip: The Y position of the Power UI (0-1)
-		}
-
-		ShowPowerText: {
-			// Label: Show_Power_Text
-			// Tooltip: Whether to show the power text on the UI
+		Show_Power_Text: {
+			Label: 显示 Power 文本
+			Tooltip: 是否在 UI 上显示 Power 文本
 		}
 	}
 }
@@ -32,44 +26,52 @@ Configs: {
 Items: {
 	PowerTestItem: {
 		DisplayName: 能量测试物品
-		Tooltip:
-			'''
-			左键增加100power值
-			右键减少100power值
-			'''
+		Tooltip: "左键增加 100 Power 值\n右键减少 100 Power 值"
 	}
 
 	Boki: {
 		DisplayName: 波奇酱的发饰
-		// Tooltip: ""
+		Tooltip:
+			'''
+			[c/FFB6C1:幻化为后藤一里的姿态]
+			将外观完全替换为那位粉发社恐吉他手，附带运动服与呆毛
+			[c/BEBEBE:穿戴为整套时装]
+			[c/FF69B4:啊哇哇哇…！不要看我…好想变成墙角的蘑菇…]
+			[c/808080:「我…我是来结束的……呜……」]
+			'''
 	}
 
 	Nanatra: {
 		DisplayName: 七海的帽子
-		// Tooltip: ""
+		Tooltip:
+			'''
+			[c/6495ED:幻化为在原七海的姿态]
+			将外观完全替换为在原七海
+			[c/BEBEBE:穿戴为整套时装]
+			[c/808080:既然戴上了，就不准随便摘下来哦。]
+			'''
 	}
 
 	KoishiFumo: {
-		DisplayName: 古明地觉布偶
-		// Tooltip: ""
+		DisplayName: 古明地恋布偶
+		Tooltip: 可爱
 	}
 
 	NanamiItem: {
 		DisplayName: 七海的微笑
-		// Tooltip: ""
 	}
 
 	Gohei: {
 		DisplayName: 御币
 		Tooltip:
 			'''
-			左键发射符扎
-			按照不同的power等级提升强度
-			[c/F08080:一级发射两枚符扎]
-			[c/FF6347:二级拥有两枚阴阳玉环绕，阴阳玉会发射追踪符]
-			[c/FF4500:三级发射四枚符扎]
-			[c/FF0000:四级拥有四枚阴阳玉环绕]
-			右键使用Bomb「梦想封印」
+			左键发射符札
+			根据不同的 Power 等级提升强度
+			[c/F08080:一级发射两枚符札]
+			[c/FF6347:二级拥有两枚环绕的阴阳玉，阴阳玉会发射追踪符]
+			[c/FF4500:三级发射四枚符札]
+			[c/FF0000:四级拥有四枚环绕的阴阳玉]
+			右键使用 Bomb「梦想封印」
 			'''
 	}
 
@@ -77,16 +79,16 @@ Items: {
 		DisplayName: 蓝弹
 		Tooltip:
 			'''
-			这是[c/1C86EE:蓝][c/00BFFF:蓝]的弹
-			发射追踪特别的[c/FF7F24:强力]的子弹
+			一枚蓝色子弹
+			会发射特别强力的追踪弹
 			'''
 	}
 }
 
 Projectiles: {
-	// BuleBullet.DisplayName: Bule Bullet
-	// DreamSeal.DisplayName: Dream Seal
-	// HomingAmulet.DisplayName: Homing Amulet
-	// Ofuda.DisplayName: Ofuda
+	BuleBullet.DisplayName: 蓝弹
+	DreamSeal.DisplayName: 梦想封印
+	HomingAmulet.DisplayName: 追踪符
+	Ofuda.DisplayName: 符札
 	YinYangOrb.DisplayName: 阴阳玉
 }

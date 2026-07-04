@@ -3,27 +3,21 @@ Configs: {
 		DisplayName: Ofriend Config
 
 		Headers: {
-			UI设置: U I设置 Header
-			Power_UI_Settings: Power_ U I_ Settings Header
+			Power_UI_Settings: Power UI Settings
 		}
 
-		PowerUIPosition: {
-			Label: Power UI 位置
-			Tooltip: Power UI 在屏幕上的位置
+		UI_Position_X: {
+			Label: UI Position X
+			Tooltip: Distance from the left edge of the screen in pixels
 		}
 
-		PowerUIPositionX: {
-			Label: Power_UI_Position_X
-			Tooltip: The X position of the Power UI (0-1)
+		UI_Position_Y: {
+			Label: UI Position Y
+			Tooltip: Distance from the top edge of the screen in pixels
 		}
 
-		PowerUIPositionY: {
-			Label: Power_UI_Position_Y
-			Tooltip: The Y position of the Power UI (0-1)
-		}
-
-		ShowPowerText: {
-			Label: Show_Power_Text
+		Show_Power_Text: {
+			Label: Show Power Text
 			Tooltip: Whether to show the power text on the UI
 		}
 	}
@@ -32,42 +26,67 @@ Configs: {
 Items: {
 	PowerTestItem: {
 		DisplayName: Power Test Item
-		Tooltip: ""
+		Tooltip: "Left-click to add 100 power\nRight-click to remove 100 power"
 	}
 
 	Boki: {
 		DisplayName: Boki
-		Tooltip: ""
+		Tooltip:
+			'''
+			[c/FFB6C1:Transforms you into Hitori Gotoh]
+			Fully replaces your appearance with the pink-haired anxious guitarist, complete with tracksuit and ahoge
+			[c/BEBEBE:Vanity set piece]
+			[c/FF69B4:Ahwahwah...! Don't look at me... I want to turn into a corner mushroom...]
+			[c/808080:"I... I'm here to end it all... ugh..."]
+			'''
 	}
 
 	Nanatra: {
 		DisplayName: Nanatra
-		Tooltip: ""
+		Tooltip:
+			'''
+			[c/6495ED:Transforms you into Nanami Arihara]
+			Fully replaces your appearance with Nanami Arihara
+			[c/BEBEBE:Vanity set piece]
+			[c/808080:Now that you put it on, you are not allowed to take it off so casually.]
+			'''
 	}
 
 	KoishiFumo: {
 		DisplayName: Koishi Fumo
-		Tooltip: ""
+		Tooltip: Cute
 	}
 
 	NanamiItem: {
-		DisplayName: Nanami Item
-		Tooltip: ""
+		DisplayName: Nanami Smile
 	}
 
 	Gohei: {
 		DisplayName: Gohei
-		Tooltip: ""
+		Tooltip:
+			'''
+			Left-click to fire ofuda
+			Power level increases its strength
+			[c/F08080:Level 1 fires two ofuda]
+			[c/FF6347:Level 2 summons two orbiting yin-yang orbs that fire homing amulets]
+			[c/FF4500:Level 3 fires four ofuda]
+			[c/FF0000:Level 4 summons four orbiting yin-yang orbs]
+			Right-click to use Bomb "Dream Seal"
+			'''
 	}
 
 	BuleBullet: {
-		DisplayName: Bule Bullet
-		Tooltip: ""
+		DisplayName: Blue Bullet
+		Tooltip:
+			'''
+			A blue bullet
+			Fires especially powerful homing shots
+			'''
 	}
 }
 
 Projectiles: {
-	BuleBullet.DisplayName: Bule Bullet
+	BuleBullet.DisplayName: Blue Bullet
 	DreamSeal.DisplayName: Dream Seal
 	HomingAmulet.DisplayName: Homing Amulet
 	Ofuda.DisplayName: Ofuda

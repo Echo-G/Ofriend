@@ -12,7 +12,7 @@ namespace Ofriend.Items
         {
             Item.width = 14;
             Item.height = 14;
-            Item.damage = 40;
+            Item.damage = 16;
             Item.DamageType = DamageClass.Ranged;
             Item.knockBack = 2f;
             Item.maxStack = Item.CommonMaxStack;
