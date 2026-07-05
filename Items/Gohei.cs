@@ -25,8 +25,8 @@ namespace Ofriend.Items
 
         public override void SetDefaults()
         {
-            Item.width = 32;
-            Item.height = 32;
+            Item.width = 33;
+            Item.height = 33;
             Item.useTime = 8;
             Item.useAnimation = 8;
             Item.useStyle = ItemUseStyleID.Shoot;
