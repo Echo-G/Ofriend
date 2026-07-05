@@ -5,7 +5,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-//大浩
+//sb大浩
 namespace Ofriend.Items
 {
     public class Gohei : ModItem
