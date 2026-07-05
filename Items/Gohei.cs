@@ -5,7 +5,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-
+//sb大浩
 namespace Ofriend.Items
 {
     public class Gohei : ModItem
@@ -25,8 +25,8 @@ namespace Ofriend.Items
 
         public override void SetDefaults()
         {
-            Item.width = 32;
-            Item.height = 32;
+            Item.width = 33;
+            Item.height = 33;
             Item.useTime = 8;
             Item.useAnimation = 8;
             Item.useStyle = ItemUseStyleID.Shoot;
