@@ -1,3 +1,5 @@
 displayName = 老友友
-author = 大浩
+author = 大浩,老友
 version = 0.1
+
+buildIgnore = ai_reference\

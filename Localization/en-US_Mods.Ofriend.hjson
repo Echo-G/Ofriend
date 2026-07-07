@@ -1,10 +1,7 @@
 Configs: {
 	OfriendConfig: {
 		DisplayName: Ofriend Config
-
-		Headers: {
-			Power_UI_Settings: Power UI Settings
-		}
+		Headers.Power_UI_Settings: Power UI Settings
 
 		UI_Position_X: {
 			Label: UI Position X
@@ -20,13 +17,32 @@ Configs: {
 			Label: Show Power Text
 			Tooltip: Whether to show the power text on the UI
 		}
+
+		ShowPowerText: {
+			Label: Show_Power_Text
+			Tooltip: Whether to show the power text on the UI
+		}
+
+		PowerUIPositionX: {
+			Label: UI_Position_X
+			Tooltip: Distance from left edge of screen in pixels
+		}
+
+		PowerUIPositionY: {
+			Label: UI_Position_Y
+			Tooltip: Distance from top edge of screen in pixels
+		}
 	}
 }
 
 Items: {
 	PowerTestItem: {
 		DisplayName: Power Test Item
-		Tooltip: "Left-click to add 100 power\nRight-click to remove 100 power"
+		Tooltip:
+			'''
+			Left-click to add 100 power
+			Right-click to remove 100 power
+			'''
 	}
 
 	Boki: {
@@ -59,6 +75,7 @@ Items: {
 
 	NanamiItem: {
 		DisplayName: Nanami Smile
+		Tooltip: ""
 	}
 
 	Gohei: {
@@ -83,6 +100,11 @@ Items: {
 			Fires especially powerful homing shots
 			'''
 	}
+
+	dogdogbark: {
+		DisplayName: dogdogbark
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -91,4 +113,7 @@ Projectiles: {
 	HomingAmulet.DisplayName: Homing Amulet
 	Ofuda.DisplayName: Ofuda
 	YinYangOrb.DisplayName: Yin-Yang Orb
+	DogDogBarkHoldout.DisplayName: Dog Dog Bark Holdout
+	DogHeadProjectile.DisplayName: Dog Head Projectile
+	DogLaserProjectile.DisplayName: Dog Laser Projectile
 }
