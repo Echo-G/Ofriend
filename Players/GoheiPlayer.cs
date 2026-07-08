@@ -18,6 +18,7 @@ namespace Ofriend.Players
         private int bombTimer;
         private int dreamSealsFired;
         private int screenShakeTimer;
+        private int screenShakeDuration;
         private float screenShakeIntensity;
 
         public bool IsBombActive => dreamSealsFired < DreamSealIntervals.Length && bombTimer > 0;
@@ -32,6 +33,7 @@ namespace Ofriend.Players
         public void RequestScreenShake(int frames, float intensity)
         {
             screenShakeTimer = System.Math.Max(screenShakeTimer, frames);
+            screenShakeDuration = System.Math.Max(screenShakeDuration, screenShakeTimer);
             screenShakeIntensity = System.Math.Max(screenShakeIntensity, intensity);
         }
 
@@ -52,12 +54,28 @@ namespace Ofriend.Players
         {
             if (screenShakeTimer <= 0 || screenShakeIntensity <= 0f)
             {
+                screenShakeTimer = 0;
+                screenShakeDuration = 0;
+                screenShakeIntensity = 0f;
                 return;
             }
 
-            Main.screenPosition += Main.rand.NextVector2Circular(screenShakeIntensity, screenShakeIntensity);
+            int fadeFrames = System.Math.Max(1, System.Math.Min(20, screenShakeDuration / 4));
+            float fade = screenShakeTimer < fadeFrames
+                ? screenShakeTimer / (float)fadeFrames
+                : 1f;
+
+            Main.screenPosition += Main.rand.NextVector2Circular(
+                screenShakeIntensity * fade,
+                screenShakeIntensity * fade);
+
             screenShakeTimer--;
-            screenShakeIntensity *= 0.88f;
+
+            if (screenShakeTimer <= 0)
+            {
+                screenShakeDuration = 0;
+                screenShakeIntensity = 0f;
+            }
         }
 
         private void UpdateBomb()

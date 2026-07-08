@@ -11,6 +11,8 @@ namespace Ofriend.Projectiles
         private const float BackDistance = 96f;
         private const float SpreadSpacing = 34f;
         private const float MoveLerp = 0.25f;
+        private const float RecoilDamping = 0.82f;
+        private const float RecoilStopSpeed = 0.08f;
 
         public override string Texture => "Ofriend/Projectiles/DogHeadCharge";
 
@@ -48,7 +50,12 @@ namespace Ofriend.Projectiles
 
             if (IsFiring)
             {
-                Projectile.velocity = Vector2.Zero;
+                Projectile.velocity *= RecoilDamping;
+                if (Projectile.velocity.LengthSquared() < RecoilStopSpeed * RecoilStopSpeed)
+                {
+                    Projectile.velocity = Vector2.Zero;
+                }
+
                 return;
             }
 

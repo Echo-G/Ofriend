@@ -21,8 +21,10 @@ namespace Ofriend.Projectiles
         private const int LaserMinDurationFrames = 60;
         private const int LaserMaxDurationFrames = 180;
         private const int LaserFullChargeFrames = 720;
-        private const int FireShakeFrames = 18;
-        private const float FireShakeIntensity = 9f;
+        private const float FireShakeDurationMultiplier = 0.85f;
+        private const float FireShakeMinIntensity = 9f;
+        private const float FireShakeMaxIntensity = 18f;
+        private const float RecoilSpeed = 7f;
 
         private static readonly float[] SpawnPitches = new float[]
         {
@@ -234,7 +236,7 @@ namespace Ofriend.Projectiles
                 MaxInstances = 3
             }, player.Center);
 
-            player.GetModPlayer<GoheiPlayer>().RequestScreenShake(FireShakeFrames, FireShakeIntensity);
+            player.GetModPlayer<GoheiPlayer>().RequestScreenShake(GetFireShakeFrames(laserDuration), GetFireShakeIntensity());
 
             for (int i = 0; i < dogHeadCount; i++)
             {
@@ -246,19 +248,20 @@ namespace Ofriend.Projectiles
 
                 Vector2 direction = (target - dogHead.Center).SafeNormalize(Vector2.UnitX);
                 dogHead.ai[0] = 1f;
-                dogHead.velocity = Vector2.Zero;
+                dogHead.velocity = -direction * RecoilSpeed;
                 dogHead.timeLeft = laserDuration;
                 dogHead.netUpdate = true;
 
                 Projectile.NewProjectile(
                     Projectile.GetSource_FromThis(),
                     dogHead.Center,
-                    direction,
+                    -direction * RecoilSpeed,
                     ModContent.ProjectileType<DogLaserProjectile>(),
                     laserDamage,
                     Projectile.knockBack,
                     Projectile.owner,
-                    laserDuration);
+                    laserDuration,
+                    direction.ToRotation());
             }
         }
 
@@ -281,6 +284,17 @@ namespace Ofriend.Projectiles
             return MathHelper.Clamp(speed - 1f, -1f, 1f);
         }
 
+        private float GetFireShakeIntensity()
+        {
+            float progress = MathHelper.Clamp((dogHeadCount - 1) / (float)(MaxDogHeads - 1), 0f, 1f);
+            return MathHelper.Lerp(FireShakeMinIntensity, FireShakeMaxIntensity, progress);
+        }
+
+        private static int GetFireShakeFrames(int laserDuration)
+        {
+            return System.Math.Max(1, (int)(laserDuration * FireShakeDurationMultiplier));
+        }
+
         private void PlayOverflowDogdogSound(Vector2 position)
         {
             overflowSoundCount++;
@@ -293,9 +307,8 @@ namespace Ofriend.Projectiles
                 return;
             }
 
-            float octavePitch = MathHelper.Clamp(-0.20f + (overflowSoundCount - 6) * 0.08f, -0.20f, 0.20f);
-            PlayDogdogSound(position, octavePitch, true);
-            nextDogSoundTimer = GetDogdogInterval(DogdogOctaveFrames, octavePitch);
+            PlayDogdogSound(position, 0f, true);
+            nextDogSoundTimer = DogdogOctaveFrames;
         }
 
         private static void PlayDogdogSound(Vector2 position, float pitch, bool octave)

@@ -1,7 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.GameContent;
 using Terraria.ModLoader;
 
 namespace Ofriend.Projectiles
@@ -9,12 +8,16 @@ namespace Ofriend.Projectiles
     public class DogLaserProjectile : ModProjectile
     {
         private const float LaserLength = 1200f;
-        private const float LaserWidth = 18f;
+        private const float LaserStartOffset = 18f;
+        private const float LaserWidth = 32f;
         private const int FadeFrames = 12;
+        private const float RecoilDamping = 0.82f;
+        private const float RecoilStopSpeed = 0.08f;
 
-        public override string Texture => "Ofriend/Items/dogdogbark";
+        public override string Texture => "Ofriend/Projectiles/DogLaser";
 
         public int InitialTimeLeft => System.Math.Max(1, (int)Projectile.ai[0]);
+        private Vector2 LaserDirection => Projectile.ai[1].ToRotationVector2();
 
         public override void SetDefaults()
         {
@@ -39,15 +42,20 @@ namespace Ofriend.Projectiles
                 Projectile.localAI[0] = 1f;
             }
 
-            Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.UnitX);
-            Projectile.rotation = Projectile.velocity.ToRotation();
+            Projectile.velocity *= RecoilDamping;
+            if (Projectile.velocity.LengthSquared() < RecoilStopSpeed * RecoilStopSpeed)
+            {
+                Projectile.velocity = Vector2.Zero;
+            }
+
+            Projectile.rotation = Projectile.ai[1];
         }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
             float collisionPoint = 0f;
-            Vector2 start = Projectile.Center;
-            Vector2 end = start + Projectile.velocity.SafeNormalize(Vector2.UnitX) * LaserLength;
+            Vector2 start = GetLaserStart();
+            Vector2 end = start + LaserDirection * LaserLength;
 
             return Collision.CheckAABBvLineCollision(
                 targetHitbox.TopLeft(),
@@ -60,17 +68,29 @@ namespace Ofriend.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D pixel = TextureAssets.MagicPixel.Value;
-            Vector2 start = Projectile.Center - Main.screenPosition;
-            Vector2 direction = Projectile.velocity.SafeNormalize(Vector2.UnitX);
-            float rotation = direction.ToRotation();
+            Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
+            Vector2 start = GetLaserStart() - Main.screenPosition;
             float opacity = GetOpacity();
+            float widthScale = LaserWidth / texture.Height;
+            float lengthScale = LaserLength / texture.Width;
 
-            DrawLaser(pixel, start, rotation, LaserWidth * 1.55f, Color.DeepSkyBlue * (0.22f * opacity));
-            DrawLaser(pixel, start, rotation, LaserWidth, Color.Cyan * (0.55f * opacity));
-            DrawLaser(pixel, start, rotation, LaserWidth * 0.42f, Color.White * (0.90f * opacity));
+            Main.EntitySpriteDraw(
+                texture,
+                start,
+                null,
+                Color.White * opacity,
+                Projectile.rotation,
+                new Vector2(0f, texture.Height * 0.5f),
+                new Vector2(lengthScale, widthScale),
+                SpriteEffects.None,
+                0);
 
             return false;
+        }
+
+        private Vector2 GetLaserStart()
+        {
+            return Projectile.Center + LaserDirection * LaserStartOffset;
         }
 
         private float GetOpacity()
@@ -79,20 +99,6 @@ namespace Ofriend.Projectiles
             float fadeIn = MathHelper.Clamp(elapsed / (float)FadeFrames, 0f, 1f);
             float fadeOut = MathHelper.Clamp(Projectile.timeLeft / (float)FadeFrames, 0f, 1f);
             return System.Math.Min(fadeIn, fadeOut);
-        }
-
-        private static void DrawLaser(Texture2D pixel, Vector2 start, float rotation, float width, Color color)
-        {
-            Main.EntitySpriteDraw(
-                pixel,
-                start,
-                new Rectangle(0, 0, 1, 1),
-                color,
-                rotation,
-                new Vector2(0f, 0.5f),
-                new Vector2(LaserLength, width),
-                SpriteEffects.None,
-                0);
         }
     }
 }
